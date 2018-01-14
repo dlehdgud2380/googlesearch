@@ -2,9 +2,23 @@
 Created on May 5, 2017
 
 @author: anthony
+@forked and fixed for Python3 by Sc0_ネプ
+
+----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+MIT License
+
+Copyright (c) 2017, Anthony Hseb
+
+Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the "Software"), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 '''
+
 import urllib.request
-#import urllib2
+#import urllib2 //python2 code
 import math
 import re
 from bs4 import BeautifulSoup
@@ -31,17 +45,17 @@ class GoogleSearch:
         total = None;
         for i in range(pages) :
             start = i * GoogleSearch.RESULTS_PER_PAGE
-            #opener = urllib2.build_opener()
+            #opener = urllib2.build_opener() //python2 code
             opener = urllib.request.build_opener()
             opener.addheaders = GoogleSearch.DEFAULT_HEADERS
-            #response = opener.open(GoogleSearch.SEARCH_URL + "?q="+ urllib2.quote(query) + ("" if start == 0 else ("&start=" + str(start))))
+            #response = opener.open(GoogleSearch.SEARCH_URL + "?q="+ urllib2.quote(query) + ("" if start == 0 else ("&start=" + str(start)))) //python2 code
             response = opener.open(GoogleSearch.SEARCH_URL + "?q="+ urllib.request.pathname2url(query) + ("" if start == 0 else ("&start=" + str(start))))
             soup = BeautifulSoup(response.read(), "lxml")
             response.close()
             if total is None:
-                #totalText = soup.select(GoogleSearch.TOTAL_SELECTOR)[0].children.next().encode('utf-8')
+                #totalText = soup.select(GoogleSearch.TOTAL_SELECTOR)[0].children.next().encode('utf-8') //python2 code
                 totalText = soup.select(GoogleSearch.TOTAL_SELECTOR)[0].children.__next__().encode('utf-8')
-                #total = long(re.sub("[', ]", "", re.search("(([0-9]+[', ])*[0-9]+)", totalText).group(1)))
+                #total = long(re.sub("[', ]", "", re.search("(([0-9]+[', ])*[0-9]+)", totalText).group(1))) //python2 code
                 total = int(re.sub(b"[', ]", b"", re.search(b"(([0-9]+[', ])*[0-9]+)", totalText).group(1)))
             results = self.parseResults(soup.select(GoogleSearch.RESULT_SELECTOR))
             if len(searchResults) + len(results) > num_results:
@@ -103,7 +117,7 @@ class SearchResult:
     def __str__(self):
         return  str(self.__dict__)
     def __unicode__(self):
-        #return unicode(self.__str__())
+        #return unicode(self.__str__()) //python2 code
         unicode = self.__str__()
         return unicode
     def __repr__(self):
